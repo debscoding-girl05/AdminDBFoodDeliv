@@ -3,7 +3,7 @@ import AdminPanelLayout from "./components/admin-panel/admin-panel-layout";
 import { ContentLayout } from "./components/admin-panel/content-layout";
 import { ThemeProvider } from "./providers/theme-provider";
 import AllTechs from "./components/admin-panel/AllTechs";
-import NewTech from "./components/admin-panel/NewTech";
+import { NewTech } from "./components/admin-panel/NewTech";
 
 function App() {
   return (
@@ -20,7 +20,11 @@ function App() {
               }
             />
             <Route path="/techs/all-tech" element={<AllTechs />} />
-            <Route path="/techs/new-tech" element={<NewTech />} />
+            <Route path="/techs/new-tech" element={
+              <NewTech onSubmit={(name: string, slug: string, image: string | null, active: boolean) => {
+                // Implement your submission logic here
+              }} />
+            } />
           </Routes>
         </AdminPanelLayout>
       </Router>

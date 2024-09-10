@@ -18,11 +18,12 @@ interface Technology {
 interface TechStore {
   techs: Technology[]; // Corrected type here
   addTech: (name: string, image: string, slug: Slug) => void;
+  setImage: (id: number, image: string) => void;
 }
 
 // Create the Zustand store with persistence
 export const useTechStore = create(persist<TechStore>(
-  (set) => ({
+  (set,get) => ({
     techs: [],
     addTech: (name: string, image: string, slug: Slug) =>
       set((state) => ({
@@ -33,11 +34,17 @@ export const useTechStore = create(persist<TechStore>(
             name,
             image,
             slug,
-            active: true,
+            active: false,
             created_At: new Date(), // Set the current date and time
           },
         ],
       })),
+      setImage: (id: number, image: string) =>
+        set((state) => ({
+          techs: state.techs.map((tech) =>
+            tech.id === id ? { ...tech, image } : tech
+          ),
+        })),
   }),
   {
     name: 'tech-storage', // Updated store name

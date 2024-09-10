@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch"; // Import Switch for active toggle
+import { Switch } from "@/components/ui/switch";
 import { useTechStore } from "@/hooks/techStore";
 import {
   Form,
@@ -14,7 +14,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 // Define Zod schema for form validation
 const Slug = z
@@ -28,16 +30,10 @@ const Slug = z
 const formSchema = z.object({
   name: z
     .string()
-    .min(3, {
-      message: "It must have at least 3 characters.",
-    })
+    .min(3, { message: "Name must have at least 3 characters." })
     .max(40),
   slug: Slug,
- 
-  image: z
-    .string()
-    .url({ message: "Image must be a valid URL." })
-    .optional(),
+  image: z.string().optional(),
   active: z.boolean().default(false),
   created_at: z.string().optional(),
 });
@@ -45,25 +41,35 @@ const formSchema = z.object({
 // Define form props
 interface FormulProps {
   initialData?: {
+    id ?: string;
     name: string;
     slug: string;
     image: string;
     active: boolean;
+    created_at: string;
   };
   onSubmit: (
     name: string,
     slug: string,
     image: string | null,
-    active: boolean
+    active: boolean,
+    created_at: string
   ) => void;
 }
 
 // NewTech component
 export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
+  const { id } = useParams<{ id: string }>();
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
   const addTech = useTechStore((state) => state.addTech);
-   const { setImage } = useTechStore();
+  const editTech = useTechStore((state) => state.editTech);
+
   const [isActive, setIsActive] = useState(initialData?.active || false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(initialData?.image || null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(
+    initialData?.image || null
+  );
 
   // Initialize form with default values and validation schema
   const form = useForm<z.infer<typeof formSchema>>({
@@ -77,7 +83,20 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
     },
   });
 
-  //Handle image change
+ 
+  useEffect(() => {
+    if (id) {
+      // Edit mode: Find and set the technology data
+      const techToEdit = useTechStore.getState().techs.find((tech: { id: number }) => tech.id === Number(id));
+      if (techToEdit) {
+        setSelectedImage(techToEdit.image);
+        setIsActive(techToEdit.active);
+        form.reset(techToEdit);
+      }
+    }
+  }, [id, form]);
+
+  // Handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -85,8 +104,7 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
       reader.onloadend = () => {
         const base64Image = reader.result as string;
         setSelectedImage(base64Image);
-        setImage(Date.now(), base64Image);
-        localStorage.setItem('techImage', base64Image);
+        localStorage.setItem("techImage", base64Image);
       };
       reader.readAsDataURL(file);
     }
@@ -94,22 +112,52 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
 
   // Handle form submission
   const handleSubmit = (values: z.infer<typeof formSchema>) => {
-    onSubmit(
-      values.name,
-      values.slug,
-     selectedImage,
-      values.active
-    );
+    if (id) {
+      // Edit mode
+      editTech(
+        parseInt(id), // id
+        values.name, // name
+        selectedImage || "", // image
+        values.slug, // slug
+        values.active, // active
+        values.created_at || "" // created_at (ensure it's not undefined)
+      );
+      
+      toast({
+        title: "Technology updated!",
+        description: "The technology has been updated successfully.",
+       
+      });
+       navigate("/techs/all-tech");
+      
+    } else {
+      // Add new tech
+      addTech(
+        values.name,
+        selectedImage || "",
+        values.slug,
+        values.active,
+        values.created_at || ""
+      );
+      toast({
+        title: "Technology added!",
+        description: "The technology has been added successfully.",
+       
+      });
+       navigate("/techs/all-tech");
+     
+    }
     form.reset();
+   
   };
-
-  
 
   return (
     <div>
-      <Navbar title="New Technology Form" />
+      <Navbar title={id ? "Edit Technology" : "New Technology Form"} />
       <div className="flex justify-center">
-        <h1 className="text-2xl font-bold mt-3">New Technology</h1>
+        <h1 className="text-2xl font-bold mt-3">
+          {id ? "Edit Technology" : "Add A New Technology"}
+        </h1>
       </div>
       <Form {...form}>
         <form
@@ -146,7 +194,7 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
             )}
           />
 
-          {/* Image URL field */}
+          {/* Image field */}
           <FormField
             control={form.control}
             name="image"
@@ -166,6 +214,8 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
               </FormItem>
             )}
           />
+
+          {/* Created At field */}
           <FormField
             control={form.control}
             name="created_at"
@@ -178,9 +228,13 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
                   <Input
                     {...field}
                     type="text"
-                    value={new Date().toISOString()} // Default value if not set
+                    value={
+                      initialData
+                        ? initialData.created_at
+                        : new Date().toISOString()
+                    }
                     readOnly
-                    className=" text-gray-500"
+                    className="text-gray-500"
                   />
                 </FormControl>
                 <FormMessage />
@@ -201,7 +255,6 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
                 >
                   {isActive ? "Active" : "Not active"}
                 </FormLabel>
-
                 <FormControl>
                   <Switch
                     checked={field.value}
@@ -221,7 +274,7 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
             className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 ..."
             type="submit"
           >
-            Submit
+            {initialData ? "Update" : "Submit"}
           </Button>
         </form>
       </Form>

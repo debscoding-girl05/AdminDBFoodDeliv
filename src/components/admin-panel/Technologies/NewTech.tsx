@@ -154,8 +154,8 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
   return (
     <div>
       <Navbar title={id ? "Edit Technology" : "New Technology Form"} />
-      <div className="flex justify-center">
-        <h1 className="text-2xl font-bold mt-3">
+      <div className="flex justify-center bg-gray-100 p-2 rounded-lg shadow-xl  text-cyan-900 text-center">
+        <h1 className="text-2xl font-bold mt-3 text-center">
           {id ? "Edit Technology" : "Add A New Technology"}
         </h1>
       </div>

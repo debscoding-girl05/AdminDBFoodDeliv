@@ -52,12 +52,21 @@ export const formSchema = z.object({
   status: z.boolean().default(false),
   publish: z.boolean().default(false),
   created_at: z.string().optional(),
+  level:z.string(),
+  difficulty:z.number(),
   technologies: z.array(
     z.object({
       id: z.number(),
       name: z.string(),
     })
   ),
+   selectedTechs: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string(),
+    })
+  ),
+  defaultTechnology:z.string().optional(),
 });
 
 interface FormProps {
@@ -76,6 +85,10 @@ interface FormProps {
     status: boolean;
     created_at: string;
     technologies: { id: number; name: string }[];
+    selectedTechs:{ id: number; name: string }[];
+    defaultTechnology:string;
+    level:string;
+    difficulty:number;
   };
   onSubmit: (data: z.infer<typeof formSchema>) => void;
 }
@@ -94,6 +107,9 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
 
   const { techs } = useTechStore();
   const { id } = useParams<{ id: string }>();
+  
+
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -106,6 +122,18 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
     label: tech.name,
   }));
 
+   const levelOptions = [
+     { value: "beginner", label: "Beginner" },
+     { value: "intermediary", label: "Intermediary" },
+     { value: "expert", label: "Expert" },
+   ];
+
+   const difficultyOptions = Array.from({ length: 10 }, (_, i) => ({
+     value: i + 1,
+     label: (i + 1).toString(),
+   }));
+  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -116,12 +144,15 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
       meta_title: initialData?.meta_title || "",
       meta_description: initialData?.meta_description || "",
       meta_keywords: initialData?.meta_keywords || [],
+      level:initialData?.level || "Beginner",
+      difficulty:initialData?.difficulty || 1,
       video_url: initialData?.video_url || "",
       image: initialData?.image || "",
       publish: initialData?.publish || false,
       status: initialData?.status || false,
       created_at: initialData?.created_at || new Date().toISOString(),
       technologies: initialData?.technologies || [],
+      defaultTechnology: initialData?.defaultTechnology || "",
     },
   });
   useEffect(() => {
@@ -140,14 +171,20 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
           technologies: tutoToEdit.technologies.map((tech) => ({
             id: tech.id,
             name: tech.name,
-        })),
-      });
-      console.log("Selected Image:", selectedImage);
+          })),
+          selectedTechs: tutoToEdit.selectedTechs.map((seltech) => ({
+            id: seltech.id,
+            name: seltech.name,
+          })),
+        });
+        console.log("Selected Image:", selectedImage);
         setSelectedImage(tutoToEdit.image || null);
-        setTags(tutoToEdit.meta_keywords.map((keyword) => ({
-          id: keyword.id.toString(),
-          text: keyword.name,
-        })));
+        setTags(
+          tutoToEdit.meta_keywords.map((keyword) => ({
+            id: keyword.id.toString(),
+            text: keyword.name,
+          }))
+        );
         setIsActive(tutoToEdit.status);
         setIsPublished(tutoToEdit.publish);
       }
@@ -172,12 +209,13 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
     const tutorialData = {
       ...data,
       id: id ? parseInt(id) : Date.now(),
-      technology_id: data.technologies[0]?.id || 0, // Use 0 as default if no technology
+      technology_id: data.technologies[0]?.id || 0,
       meta_keywords: data.meta_keywords.map((keyword) => ({
         id: parseInt(keyword.id),
         name: keyword.text,
       })),
-      image: selectedImage || '', // Provide a default empty string if image is undefined
+      image: selectedImage || "",
+      defaultTechnology: data.defaultTechnology || "", // Ensure defaultTechnology is a string
     };
 
     if (id) {
@@ -193,11 +231,11 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
 
   return (
     <div>
-      <div>
-        <Navbar title={id ? "Edit Tutorial" : "Add Tutorial"} />
-        <div className="flex justify-center bg-grey p-2 rounded-lg shadow-md  text-cyan-900 text-center">
-          <h1 className="text-2xl font-bold mt-3 text-center">
-            {id ? "Edit Tutorial" : "Add Tutorial"}
+      <div className="pb-5">
+        <Navbar title={id ? "Edit Tutorial" : "New Tutorial Form"} />
+        <div className="flex justify-center bg-gray-100 p-2 rounded-lg shadow-xl  text-cyan-900 text-center ">
+          <h1 className="text-2xl font-bold mt-3 text-center ">
+            {id ? "Edit Tutorial" : "Add A New Tutorial"}
           </h1>
         </div>
       </div>
@@ -315,6 +353,50 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
                     </FormItem>
                   )}
                 />
+
+                {/* Add the level select */}
+                 <FormField control={form.control} name="level" render={({ field }) => ( // Added render prop
+                  <FormItem>
+                    <FormLabel>Level</FormLabel>
+                    <FormControl>
+                      <Select
+                        options={levelOptions}
+                        defaultValue={levelOptions.find(
+                          (option) => option.value === field.value // Use field.value instead of form.getValues
+                        )}
+                        onChange={(selectedOption) =>
+                          field.onChange(selectedOption?.value || "beginner")
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+               />
+
+                {/* Add the difficulty select */}
+                <FormField control={form.control} name="difficulty" render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Difficulty</FormLabel>
+                    <FormControl>
+                      <Select
+                        options={difficultyOptions}
+                        defaultValue={difficultyOptions.find(
+                          (option) =>
+                            option.value === form.getValues("difficulty")
+                        )}
+                        onChange={(selectedOption) =>
+                          form.setValue(
+                            "difficulty",
+                            selectedOption?.value || 1
+                          )
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )} />
+
                 <FormField
                   control={form.control}
                   name="meta_keywords"
@@ -495,6 +577,42 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
                   )}
                 />
 
+                <FormField
+                  control={form.control}
+                  name="defaultTechnology"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 font-semibold">
+                        Default Technology
+                      </FormLabel>
+                      <Select
+                        {...field}
+                        options={technologies}
+                        onChange={(option) =>
+                          field.onChange({
+                            id: Number(option?.value), // Use optional chaining operator (?.)
+                            name: option?.label,
+                          })
+                        }
+                        value={
+                          field.value
+                            ? {
+                                value: (field.value as { id: number } | string) // Allow string type
+                                  .toString(), // Convert to string
+
+                                label:
+                                  typeof field.value === "string"
+                                    ? ""
+                                    : (field.value as { name: string }).name, // Check type before accessing name
+                              }
+                            : null
+                        }
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 {/* Created At field */}
                 <FormField
                   control={form.control}
@@ -525,7 +643,7 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
             </div>
             <button
               type="submit"
-              className="bg-gradient-to-r from-teal-400 to-indigo-500 hover:from-cyan-500 hover:to-red-500 ...text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105"
+              className="bg-gradient-to-r from-teal-400 to-indigo-500 hover:from-cyan-500 hover:to-red-500 ...text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 ring-2 hover:ring-4"
             >
               {id ? "Update Tutorial" : "Add Tutorial"}
             </button>

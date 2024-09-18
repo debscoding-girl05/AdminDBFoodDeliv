@@ -27,7 +27,11 @@ interface Tutorial {
     technology_id: number;
     image: string;
     publish: boolean;
+    defaultTechnology:string,
+    level:string,
+    difficulty:number,
     technologies: { id: number; name: string }[];
+    selectedTechs: { id: number; name: string }[];
     
 }
 

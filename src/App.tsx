@@ -5,38 +5,15 @@ import { ThemeProvider } from "./providers/theme-provider";
 import AllTechs from "./components/admin-panel/Technologies/AllTechs";
 import { NewTech } from "./components/admin-panel/Technologies/NewTech";
 import { Toaster } from "./components/ui/toaster";
-import { useTechStore } from "./hooks/techStore";
 import ErrorPage from "./components/admin-panel/error-page";
-import { Test, formSchema } from "./components/admin-panel/Tutorials/NewTuto";
+import { Test } from "./components/admin-panel/Tutorials/NewTuto";
 import AllTutos from "./components/admin-panel/Tutorials/AllTutos";
-import { useTutoStore } from "./hooks/tutoStore";
-import { z } from "zod";
+import { handleSubmit } from "./lib/formHandler";
+import { handleTutorialSubmit } from "./lib/formHandler";
+
 
 function App() {
-  const addTech = useTechStore((state) => state.addTech);
-  const addTutorial = useTutoStore((state) => state.addTutorial);
-
-  const handleSubmit = (
-    name: string,
-    slug: string,
-    image: string | null,
-    active: boolean,
-    created_At: string // Changed to string
-  ) => {
-    addTech(name, image || "", slug, active, created_At);
-  };
  
-
-  const handleTutorialSubmit = (data: z.infer<typeof formSchema>) => {
-    const technology_id = Number(data.technologies[0]?.id) || 0;
-    const adjustedData = {
-      ...data,
-      technology_id,
-      meta_keywords: data.meta_keywords.map(({ id, text }) => ({ id: Number(id), name: text })),
-      image: data.image || '', // Provide default empty string
-    };
-    addTutorial(adjustedData);
-  };
 
   return (
     <ThemeProvider>

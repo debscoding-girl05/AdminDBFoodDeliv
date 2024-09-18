@@ -186,8 +186,8 @@ const AllTutos: React.FC = () => {
   return (
     <div>
       <Navbar title="All Tutorials" />
-      <div className="flex justify-center items-center mt-2 bg-gray-200 py-2 rounded-md">
-        <h1 className="text-2xl font-bold text-gray-700">All Tutorials</h1>
+      <div className="flex justify-center items-center mt-2 bg-gray-200 py-2 rounded-md shadow-xl">
+        <h1 className="text-2xl font-bold text-gray-700 ">All Tutorials</h1>
       </div>
       <div className="flex justify-start items-center mt-3">
         <button

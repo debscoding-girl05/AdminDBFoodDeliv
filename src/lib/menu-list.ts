@@ -5,6 +5,9 @@ import {
   SquarePen,
   NotebookTabs,
   MonitorStop,
+  BookOpenText,
+  LibraryBig,
+  Blocks,
 } from "lucide-react";
 
 type Submenu = {
@@ -68,7 +71,7 @@ export function getMenuList(pathname: string): Group[] {
       ]
     },
      {
-      groupLabel: "Tutorials",
+      groupLabel: "",
       menus: [
         {
           href: "/tutorials",
@@ -91,6 +94,72 @@ export function getMenuList(pathname: string): Group[] {
             }
           ]
         }
+      ]
+    },
+    
+    {
+      groupLabel: "",
+      menus:[
+        {
+          href:"/formations",
+          label: "Formations",
+          active:pathname.includes("/formations"),
+          icon:BookOpenText ,
+          submenus:[
+            {
+              href: "/formations/all-formations",
+              label: "All formations",
+              active: pathname === "/formations/all-formations",
+              icon: NotebookTabs,
+            },
+            {
+              href: "/formations/new-formation",
+              label: "New formations",
+              active: pathname === "/formations/new-formation",
+              icon: SquarePen,
+            }
+          ]
+        },
+        {
+          href:"/lessons",
+          label:"Lessons",
+          active:pathname.includes("/lessons"),
+          icon:LibraryBig,
+          submenus:[
+            {
+              href:"/lessons/all-lessons",
+              label: "All Lessons",
+              active:pathname === "/lessons/all-lessons",
+              icon:NotebookTabs,
+            },
+            {
+              href: "/lessons/new-lesson",
+              label: "New lessons",
+              active: pathname === "/lessons/new-lesson",
+              icon: SquarePen,
+            }
+          ]
+        },
+        {
+          href:"/blocks",
+          label:"Blocks",
+          active:pathname.includes("/blocks"),
+          icon:Blocks,
+          submenus:[
+            {
+              href:"/blocks/all-blocks",
+              label: "All blocks",
+              active:pathname === "/blocks/all-blocks",
+              icon:NotebookTabs,
+            },
+            {
+              href: "/blocks/new-block",
+              label: "New blocks",
+              active: pathname === "/blocks/new-block",
+              icon: SquarePen,
+            }
+          ]
+        },
       ]
     }
   ];

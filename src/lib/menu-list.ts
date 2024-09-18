@@ -4,6 +4,7 @@ import {
   LucideIcon,
   SquarePen,
   NotebookTabs,
+  MonitorStop,
 } from "lucide-react";
 
 type Submenu = {
@@ -59,6 +60,32 @@ export function getMenuList(pathname: string): Group[] {
               href: "/techs/new-tech",
               label: "New Technology",
               active: pathname === "/techs/new-tech",
+              icon: SquarePen,
+              
+            }
+          ]
+        }
+      ]
+    },
+     {
+      groupLabel: "Tutorials",
+      menus: [
+        {
+          href: "/tutorials",
+          label: "Tutorials",
+          active: pathname.includes("/tutorials"),
+          icon: MonitorStop ,
+          submenus: [
+            {
+              href: "/tutorials/all-tutorials",
+              label: "All Tutorials",
+              active: pathname === "/tutorials/all-tutorials",
+              icon: NotebookTabs,
+            },
+            {
+              href: "/tutorials/add-tutorial",
+              label: "New Tutorial",
+              active: pathname === "/tutorials/new-tutorial",
               icon: SquarePen,
               
             }

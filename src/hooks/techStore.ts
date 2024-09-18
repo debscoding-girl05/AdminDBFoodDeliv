@@ -17,15 +17,17 @@ interface Technology {
 // Define the techStore interface
 interface TechStore {
   techs: Technology[];
+  
   addTech: (name: string, image: string, slug: Slug, active: boolean, created_at: string) => void;
   setImage: (id: number, image: string) => void;
   editTech: (id: number, name: string, image: string, slug: Slug, active: boolean, created_at: string) => void;
   deleteTech: (id: number) => void;
+  getTechnology: (id: number) => Technology | undefined;
 }
 
 // Create the Zustand store with persistence
 export const useTechStore = create(persist<TechStore>(
-  (set) => ({
+  (set,get) => ({
     techs: [],
     addTech: (name: string, image: string, slug: Slug, active: boolean, created_at: string) =>
       set((state) => ({
@@ -57,6 +59,8 @@ export const useTechStore = create(persist<TechStore>(
       set((state) => ({
         techs: state.techs.filter((tech) => tech.id !== id),
       })),
+      getTechnology: (id: number) => get().techs.find((tech) => tech.id === id),
+      
   }),
   {
     name: 'tech-storage', // Updated store name

@@ -194,6 +194,17 @@ export const NewTech = ({ initialData, onSubmit }: FormulProps) => {
             )}
           />
 
+          {/* Display Selected Image */}
+          {selectedImage && (
+            <div className="mt-4">
+              <img
+                src={selectedImage}
+                alt="Selected"
+                className="w-auto h-auto"
+              />
+            </div>
+          )}
+
           {/* Image field */}
           <FormField
             control={form.control}

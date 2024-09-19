@@ -60,12 +60,6 @@ export const formSchema = z.object({
       name: z.string(),
     })
   ),
-   selectedTechs: z.array(
-    z.object({
-      id: z.number(),
-      name: z.string(),
-    })
-  ),
   defaultTechnology:z.string().optional(),
 });
 
@@ -85,7 +79,6 @@ interface FormProps {
     status: boolean;
     created_at: string;
     technologies: { id: number; name: string }[];
-    selectedTechs:{ id: number; name: string }[];
     defaultTechnology:string;
     level:string;
     difficulty:number;
@@ -125,7 +118,9 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
    const levelOptions = [
      { value: "beginner", label: "Beginner" },
      { value: "intermediary", label: "Intermediary" },
+     { value: "advanced", label:"Advanced"},
      { value: "expert", label: "Expert" },
+
    ];
 
    const difficultyOptions = Array.from({ length: 10 }, (_, i) => ({
@@ -144,8 +139,8 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
       meta_title: initialData?.meta_title || "",
       meta_description: initialData?.meta_description || "",
       meta_keywords: initialData?.meta_keywords || [],
-      level:initialData?.level || "Beginner",
-      difficulty:initialData?.difficulty || 1,
+      level: initialData?.level || "beginner",
+      difficulty: initialData?.difficulty || 1,
       video_url: initialData?.video_url || "",
       image: initialData?.image || "",
       publish: initialData?.publish || false,
@@ -171,10 +166,6 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
           technologies: tutoToEdit.technologies.map((tech) => ({
             id: tech.id,
             name: tech.name,
-          })),
-          selectedTechs: tutoToEdit.selectedTechs.map((seltech) => ({
-            id: seltech.id,
-            name: seltech.name,
           })),
         });
         console.log("Selected Image:", selectedImage);

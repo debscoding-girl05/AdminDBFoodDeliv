@@ -27,12 +27,10 @@ interface Tutorial {
     technology_id: number;
     image: string;
     publish: boolean;
-    defaultTechnology:string,
-    level:string,
-    difficulty:number,
+    defaultTechnology:string;
+    level:string;
+    difficulty:number;
     technologies: { id: number; name: string }[];
-    selectedTechs: { id: number; name: string }[];
-    
 }
 
 // Define the tutoStore interface
@@ -42,11 +40,12 @@ interface TutoStore {
     editTutorial: (id: number, tutorial: Tutorial) => void;
     deleteTutorial: (id: number) => void;
     setImage: (id: number, image: string) => void;
+    getTutorial:(id:number)=>Tutorial | undefined;
 }
 
 // Create the Zustand store with persistence
 export const useTutoStore = create(persist<TutoStore>(
-    (set) => ({
+    (set,get) => ({
         tutorials: [],
         addTutorial: (tutorial: Omit<Tutorial, 'id'>) => set((state) => {
             const techStore = useTechStore.getState();
@@ -76,6 +75,7 @@ export const useTutoStore = create(persist<TutoStore>(
           tuto.id === id ? { ...tuto, image } : tuto
         ),
       })),
+      getTutorial: (id:number)=>get().tutorials.find((tuto)=> tuto.id === id),
     }),
     {
         name: "tutorials",

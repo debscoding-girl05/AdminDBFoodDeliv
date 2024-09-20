@@ -20,6 +20,7 @@ import { useTutoStore } from "@/hooks/tutoStore";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
+import EditorComp from "../EditorComp/EditorComp";
 
 const Slug = z
   .string()
@@ -272,40 +273,6 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="content"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 font-semibold">
-                        Content
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Enter tutorial content"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="resume"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 font-semibold">
-                        Resume
-                      </FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter tutorial resume" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
 
                 <FormField
                   control={form.control}
@@ -346,47 +313,78 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
                 />
 
                 {/* Add the level select */}
-                 <FormField control={form.control} name="level" render={({ field }) => ( // Added render prop
-                  <FormItem>
-                    <FormLabel>Level</FormLabel>
-                    <FormControl>
-                      <Select
-                        options={levelOptions}
-                        defaultValue={levelOptions.find(
-                          (option) => option.value === field.value // Use field.value instead of form.getValues
-                        )}
-                        onChange={(selectedOption) =>
-                          field.onChange(selectedOption?.value || "beginner")
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-               />
+                <FormField
+                  control={form.control}
+                  name="level"
+                  render={(
+                    { field } // Added render prop
+                  ) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 font-semibold">
+                        Level
+                      </FormLabel>
+                      <FormControl>
+                        <Select
+                          options={levelOptions}
+                          defaultValue={levelOptions.find(
+                            (option) => option.value === field.value // Use field.value instead of form.getValues
+                          )}
+                          onChange={(selectedOption) =>
+                            field.onChange(selectedOption?.value || "beginner")
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 {/* Add the difficulty select */}
-                <FormField control={form.control} name="difficulty" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Difficulty</FormLabel>
-                    <FormControl>
-                      <Select
-                        options={difficultyOptions}
-                        defaultValue={difficultyOptions.find(
-                          (option) =>
-                            option.value === form.getValues("difficulty")
-                        )}
-                        onChange={(selectedOption) =>
-                          form.setValue(
-                            "difficulty",
-                            selectedOption?.value || 1
-                          )
-                        }
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+                <FormField
+                  control={form.control}
+                  name="difficulty"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Difficulty</FormLabel>
+                      <FormControl>
+                        <Select
+                          options={difficultyOptions}
+                          defaultValue={difficultyOptions.find(
+                            (option) =>
+                              option.value === form.getValues("difficulty")
+                          )}
+                          onChange={(selectedOption) =>
+                            form.setValue(
+                              "difficulty",
+                              selectedOption?.value || 1
+                            )
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormItem>
+                  <FormLabel className="text-gray-700 font-semibold">
+                    Content
+                  </FormLabel>
+                  <FormControl>
+                    <EditorComp name="content" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+
+                <FormItem>
+                  <FormLabel className="text-gray-700 font-semibold">
+                    Resume
+                  </FormLabel>
+                  <FormControl>
+                    <EditorComp name="resume" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
 
                 <FormField
                   control={form.control}

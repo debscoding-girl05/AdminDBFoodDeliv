@@ -21,6 +21,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useTutoStore } from "@/hooks/tutoStore";
 import { useLessonStore } from "@/hooks/lessonStore";
+import EditorComp from "../EditorComp/EditorComp";
 
 const Slug = z
   .string()
@@ -246,46 +247,6 @@ const Slug = z
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="content"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700 font-semibold">
-                          Content
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter lesson content"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="resume"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-gray-700 font-semibold">
-                          Resume
-                        </FormLabel>
-                        <FormControl>
-                          <textarea
-                            cols={20}
-                            rows={2}
-                            placeholder="Enter lesson resume"
-                            className="ml-4 mt-8"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
 
                   <FormField
                     control={form.control}
@@ -333,7 +294,9 @@ const Slug = z
                       { field } // Added render prop
                     ) => (
                       <FormItem>
-                        <FormLabel>Level</FormLabel>
+                        <FormLabel className="text-gray-700 font-semibold">
+                          Level
+                        </FormLabel>
                         <FormControl>
                           <Select
                             options={levelOptions}
@@ -384,6 +347,26 @@ const Slug = z
                       </FormItem>
                     )}
                   />
+
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-semibold">
+                      Content
+                    </FormLabel>
+                    <FormControl>
+                      <EditorComp name="content" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+
+                  <FormItem>
+                    <FormLabel className="text-gray-700 font-semibold">
+                      Resume
+                    </FormLabel>
+                    <FormControl>
+                      <EditorComp name="resume" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
                 </div>
               </div>
               <div className="border-2 border-gray-300 rounded-lg p-2 m-2 pb-5 divide-y divide-blue-200 ">

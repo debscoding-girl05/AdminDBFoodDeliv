@@ -70,7 +70,7 @@ function App() {
               element={<AllFormations />}
             />
             <Route
-              path="/tutorials/edit-tutorial/:id"
+              path="/formations/edit-formation/:id"
               element={<NewFormation onSubmit={handleFormationSubmit} />}
             />
 

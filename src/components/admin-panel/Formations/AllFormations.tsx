@@ -124,21 +124,21 @@ const AllFormations: React.FC = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() =>
-                  navigate(`/tutorials/edit-tutorial/${formation.id}`)
+                  navigate(`/formations/edit-formation/${formation.id}`)
                 }
               >
-                Edit Tutorial
+                Edit Formation
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
                   if (
-                    confirm("Are you sure you want to delete this tutorial?")
+                    confirm("Are you sure you want to delete this formation?")
                   ) {
                     deleteFormation(formation.id);
                   }
                 }}
               >
-                Delete Tutorial
+                Delete Formation
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

@@ -12,8 +12,12 @@ import {
   Bar,
   Area,
   AreaChart,
+  Line,
+  LineChart,
+  LabelList,
+  YAxis,
 } from "recharts";
-
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -37,9 +41,14 @@ import{
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLessonStore } from "@/hooks/lessonStore";
+import { DialogLessonLike } from "../Dialogs/LessonLikesTable";
+import { DialogLessonSuivis } from "../Dialogs/LessonSuivis";
 
 
-export const description = "A donut chart with text";
+
+
+//Piechart
 
 const chartData1 = [
   { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
@@ -79,12 +88,13 @@ export function PieChartComponent() {
   const totalVisitors = React.useMemo(() => {
     return chartData1.reduce((acc, curr) => acc + curr.visitors, 0);
   }, []);
+ 
 
   return (
     <Card className="flex flex-col bg-slate-100 outline outline-gray-100 overflow-hidden">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Pie Chart - Donut with Text</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Cours les plus Aimés</CardTitle>
+        <CardDescription>Janvier - Juin 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -125,7 +135,7 @@ export function PieChartComponent() {
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Visitors
+                          Likes
                         </tspan>
                       </text>
                     );
@@ -140,8 +150,8 @@ export function PieChartComponent() {
         <div className="flex items-center gap-2 font-medium leading-none">
           Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
         </div>
-        <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+        <div className="flex-center">
+           <DialogLessonLike/>
         </div>
       </CardFooter>
     </Card>
@@ -197,126 +207,116 @@ const chartConfig1 = {
 
 export function PieComponent2() {
   const id = "pie-interactive";
-  const [activeMonth, setActiveMonth] = React.useState(desktopData[0].month);
 
-  const activeIndex = React.useMemo(
-    () => desktopData.findIndex((item) => item.month === activeMonth),
-    [activeMonth]
+  const lessons=useLessonStore((state)=>state.lessons);
+
+    const [activeLesson, setActiveLesson] = React.useState(
+      lessons[0]?.title || ""
+    );
+
+   const activeIndex = React.useMemo(
+     () => lessons.findIndex((lesson) => lesson.title === activeLesson),
+     [activeLesson, lessons]
+   );
+  const lessonTitles = React.useMemo(
+    () => lessons.map((lesson) => lesson.title),
+    [lessons]
   );
-  const months = React.useMemo(() => desktopData.map((item) => item.month), []);
 
   return (
     <Card
       data-chart={id}
       className="flex flex-col bg-slate-100 outline outline-gray-100"
     >
-      <ChartStyle id={id} config={chartConfig1} />
+      {/* Chart Style */}
       <CardHeader className="flex-row items-start space-y-0 pb-0">
         <div className="grid gap-1">
-          <CardTitle>Pie Chart - Interactive</CardTitle>
-          <CardDescription>January - June 2024</CardDescription>
+          <CardTitle>Cours Les plus Suivis</CardTitle>
+          <CardDescription>Lessons Overview</CardDescription>
         </div>
-        <Select value={activeMonth} onValueChange={setActiveMonth}>
+
+        {/* Dropdown for selecting the lesson */}
+        <Select value={activeLesson} onValueChange={setActiveLesson}>
           <SelectTrigger
             className="ml-auto h-7 w-[130px] rounded-lg pl-2.5"
-            aria-label="Select a value"
+            aria-label="Select a lesson"
           >
-            <SelectValue placeholder="Select month" />
+            <SelectValue placeholder="Select Lesson" />
           </SelectTrigger>
           <SelectContent align="end" className="rounded-xl">
-            {months.map((key) => {
-              const config = chartConfig1[key as keyof typeof chartConfig1];
-
-              if (!config) {
-                return null;
-              }
-
-              return (
-                <SelectItem
-                  key={key}
-                  value={key}
-                  className="rounded-lg [&_span]:flex"
-                >
-                  <div className="flex items-center gap-2 text-xs">
-                    <span
-                      className="flex h-3 w-3 shrink-0 rounded-sm"
-                      style={{
-                        backgroundColor: `var(--color-${key})`,
-                      }}
-                    />
-                    {config?.label}
-                  </div>
-                </SelectItem>
-              );
-            })}
+            {lessonTitles.map((title) => (
+              <SelectItem
+                key={title}
+                value={title}
+                className="rounded-lg [&_span]:flex"
+              >
+                <div className="flex items-center gap-2 text-xs">
+                  <span className="flex h-3 w-3 shrink-0 rounded-sm bg-blue-500" />
+                  {title}
+                </div>
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </CardHeader>
+
       <CardContent className="flex flex-1 justify-center pb-0">
-        <ChartContainer
-          id={id}
-          config={chartConfig1}
-          className="mx-auto aspect-square w-full max-w-[300px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={desktopData}
-              dataKey="desktop"
-              nameKey="month"
-              innerRadius={60}
-              strokeWidth={5}
-              activeIndex={activeIndex}
-              activeShape={({
-                outerRadius = 0,
-                ...props
-              }: PieSectorDataItem) => (
-                <g>
-                  <Sector {...props} outerRadius={outerRadius + 10} />
-                  <Sector
-                    {...props}
-                    outerRadius={outerRadius + 25}
-                    innerRadius={outerRadius + 12}
-                  />
-                </g>
-              )}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
+        <PieChart width={300} height={300}>
+          <Pie
+            data={desktopData}
+            dataKey="desktop" // You can change this to other fields, e.g., lesson popularity or completion rate
+            nameKey="title"
+            innerRadius={60}
+            outerRadius={80}
+            activeIndex={activeIndex}
+            activeShape={({ outerRadius = 0, ...props }: PieSectorDataItem) => (
+              <g>
+                <Sector {...props} outerRadius={outerRadius + 10} />
+                <Sector
+                  {...props}
+                  outerRadius={outerRadius + 25}
+                  innerRadius={outerRadius + 12}
+                />
+              </g>
+            )}
+          >
+            <Label
+              content={({ viewBox }) => {
+                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                  return (
+                    <text
+                      x={viewBox.cx}
+                      y={viewBox.cy}
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                    >
+                      <tspan
                         x={viewBox.cx}
                         y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
+                        className="fill-foreground text-3xl font-bold"
                       >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
-                        >
-                          {desktopData[activeIndex].desktop.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Visitors
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </Pie>
-          </PieChart>
-        </ChartContainer>
+                        {lessons[activeIndex]?.duration || 2}
+                      </tspan>
+                      <tspan
+                        x={viewBox.cx}
+                        y={(viewBox.cy || 0) + 24}
+                        className="fill-muted-foreground"
+                      >
+                        Duration
+                      </tspan>
+                    </text>
+                  );
+                }
+              }}
+            />
+          </Pie>
+        </PieChart>
       </CardContent>
+      <CardFooter className="flex items-center flex-col">
+        <div className="flex items-center">
+          <DialogLessonSuivis/>
+        </div>
+      </CardFooter>
     </Card>
   );
 }
@@ -347,8 +347,8 @@ export function BarChartComponent() {
   return (
     <Card className="">
       <CardHeader>
-        <CardTitle>Bar Chart - Multiple</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Tutoriels les plus/Moins Aimés</CardTitle>
+        <CardDescription>Janvier - Septembre 2024</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig2}>
@@ -372,10 +372,10 @@ export function BarChartComponent() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Augmentation 5.2% ce mois <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Tutoriels les plus/Moins Aimés
         </div>
       </CardFooter>
     </Card>
@@ -390,6 +390,12 @@ const chartData = [
   { month: "April", desktop: 73, mobile: 190 },
   { month: "May", desktop: 209, mobile: 130 },
   { month: "June", desktop: 214, mobile: 140 },
+  { month: "July", desktop: 214, mobile: 140 },
+  { month: "August", desktop: 214, mobile: 140 },
+  { month: "September", desktop: 214, mobile: 140 },
+  { month: "October", desktop: 209, mobile: 130 },
+  { month: "November", desktop: 209, mobile: 130 },
+  { month: "December", desktop: 209, mobile: 130 },
 ];
 
 const chartConfig = {
@@ -407,9 +413,9 @@ export function AreaChartComponent() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Area Chart - Gradient</CardTitle>
+        <CardTitle>Taux D'inscriptions</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Compare nombres Visiteurs et nombres d'inscriptions
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -480,12 +486,157 @@ export function AreaChartComponent() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+               5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
+              Janvier - Decembre 2024
             </div>
           </div>
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+
+export const description = "A line chart with a label";
+
+const chartData3 = [
+  { month: "January", users: 186, mobile: 100 },
+  { month: "February", users: 305, mobile: 200 },
+  { month: "March", users: 237, mobile: 120 },
+  { month: "April", users: 73, mobile: 190 },
+  { month: "May", users: 209, mobile: 130 },
+  { month: "June", users: 214, mobile: 0 },
+];
+
+const chartConfig3 = {
+  users: {
+    label: "Users",
+    color: "hsl(var(--chart-1))",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "hsl(var(--chart-2))",
+  },
+} satisfies ChartConfig;
+
+export function LineChartComponent() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Nombre d'Utilisateurs</CardTitle>
+        <CardDescription>January - June 2024</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig3}>
+          <LineChart
+            accessibilityLayer
+            data={chartData3}
+            margin={{
+              top: 20,
+              left: 12,
+              right: 12,
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="month"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="line" />}
+            />
+            <Line
+              dataKey="users"
+              type="natural"
+              stroke="var(--color-users)"
+              strokeWidth={2}
+              dot={{
+                fill: "var(--color-users)",
+              }}
+              activeDot={{
+                r: 6,
+              }}
+            >
+              <LabelList
+                position="top"
+                offset={12}
+                className="fill-foreground"
+                fontSize={12}
+              />
+            </Line>
+          </LineChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="flex gap-2 font-medium leading-none">
+       5.2% this month <TrendingUp className="h-4 w-4" />
+        </div>
+        <div className="leading-none text-muted-foreground">
+         Montre le nombre de Visiteurs ces derniers six Mois
+        </div>
+      </CardFooter>
+    </Card>
+  );
+}
+
+const chartData4 = [
+  { month: "January", desktop: 186 },
+  { month: "February", desktop: 305 },
+  { month: "March", desktop: 237 },
+  { month: "April", desktop: 73 },
+  { month: "May", desktop: 209 },
+  { month: "June", desktop: 214 },
+];
+
+const chartConfig4 = {
+  desktop: {
+    label: "Desktop",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig;
+
+export function HoriBarchartComponent() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Tutoriels les plus Commentés</CardTitle>
+        <CardDescription>Janvier - Septembre 2024</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ChartContainer config={chartConfig4}>
+          <BarChart
+            accessibilityLayer
+            data={chartData4}
+            layout="vertical"
+            margin={{
+              left: -20,
+            }}
+          >
+            <XAxis type="number" dataKey="desktop" hide />
+            <YAxis
+              dataKey="month"
+              type="category"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
+              tickFormatter={(value) => value.slice(0, 3)}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={5} />
+          </BarChart>
+        </ChartContainer>
+      </CardContent>
+      <CardFooter className="flex-col items-start gap-2 text-sm">
+        <div className="leading-none text-muted-foreground">
+          Tutoriels les plus commentés
         </div>
       </CardFooter>
     </Card>

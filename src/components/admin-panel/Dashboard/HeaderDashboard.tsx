@@ -16,13 +16,12 @@ export default function HeaderDashboard() {
       <Card className="hover:scale-105 hover:bg-slate-100   transition ease-in-out delay-120 bg-transparent outline outline-gray-100">
         <CardHeader>
           <CardTitle className="flex flex-row text-xl gap-2">
-            {" "}
             <Users className="text-cyan-800 size-50" />
-            Card Title
+            Tout Les Utilisateurs
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Card Content</p>
+          <p className="text-2xl font-bold">1,200</p>
         </CardContent>
       </Card>
 
@@ -30,12 +29,12 @@ export default function HeaderDashboard() {
         <CardHeader>
           <CardTitle className="flex flex-row text-xl gap-2">
             {" "}
-            <Users className="text-cyan-800 size-50" />
-            Card Title
+            <SquareLibrary className="text-cyan-800 size-50" />
+            Cours Actifs
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Card Content</p>
+          <p className="text-2xl font-bold">35</p>
         </CardContent>
       </Card>
 
@@ -43,12 +42,12 @@ export default function HeaderDashboard() {
         <CardHeader>
           <CardTitle className="flex flex-row text-xl gap-2">
             {" "}
-            <Users className="text-cyan-800 size-50" />
-            Card Title
+            <NotebookTabs className="text-cyan-800 size-50" />
+            Nouveaux Inscrits
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p>Card Content</p>
+          <p className="text-2xl font-bold">120</p>
         </CardContent>
       </Card>
     </div>

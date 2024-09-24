@@ -8,6 +8,8 @@ import { useLessonStore } from "@/hooks/lessonStore";
 import { lessonSchema } from "@/components/admin-panel/Lessons/NewLesson";
 import { blockSchema } from "@/components/admin-panel/Blocks/NewBlock";
 import { useBlockStore } from "@/hooks/blockStore";
+import { userSchema } from "@/components/admin-panel/Users/NewUser";
+import { useUserStore } from "@/hooks/userStore";
 
 export const handleSubmit = (
   name: string,
@@ -71,4 +73,15 @@ export const handleBlockSubmit = (data: z.infer<typeof blockSchema>)=>{
       
 };
     addBlock(blockData);
+}
+
+export const handleUserSubmit=(data: z.infer<typeof userSchema>)=>{
+  const addUser = useUserStore((state)=>state.addUser);
+  const userData={
+    ...data,
+     image: data.image || "",
+     tel: data.tel || "",
+  };
+  addUser(userData);
+  
 }

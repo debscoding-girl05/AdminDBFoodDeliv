@@ -21,6 +21,8 @@ import { useBlockStore } from "@/hooks/blockStore";
 import { useLessonStore } from "@/hooks/lessonStore";
 import EditorComp from "../EditorComp/EditorComp";
 
+ const durationRegex = /^((\d+ hours?)?\s*(\d+ minutes?)?\s*(\d+ seconds?)?)$/;
+
 export const blockSchema = z.object({
   title: z
     .string()
@@ -29,8 +31,11 @@ export const blockSchema = z.object({
     .string()
     .min(5, { message: "Content must have at least 5 characters." }),
   duration: z
-    .string()
-    .min(2, { message: "duration must have at least 2 characters." }),
+  .string()
+  .regex(durationRegex, {
+    message:
+      "Invalid duration format. Please enter time in the format 'X hours Y minutes Z seconds'.",
+  }),
   status: z.boolean().default(false),
   select_lessons: z.array(
     z.object({

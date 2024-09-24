@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import EditorComp from "../EditorComp/EditorComp";
+import slugify from "slugify";
 
 const Slug = z
   .string()
@@ -183,6 +184,25 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
     }
   }, [id, form]);
 
+  useEffect(() => {
+    const title = form.watch("title");
+    const slug = form.watch("slug");
+
+    if (
+      title &&
+      (!id ||
+        slug === "" ||
+        slug ===
+          slugify(form.getValues("title"), { lower: true, strict: true }))
+    ) {
+      const generatedSlug = slugify(title, {
+        lower: true,
+        strict: true,
+      });
+      form.setValue("slug", generatedSlug);
+    }
+  }, [form.watch("title")]);
+
   // Handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -267,7 +287,9 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
                         Slug
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter tutorial slug" {...field} />
+                        <Input placeholder="Enter tutorial slug" {...field} 
+                        readOnly
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -319,7 +341,7 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
                   render={(
                     { field } // Added render prop
                   ) => (
-                    <FormItem>
+                    <FormItem className="z-10">
                       <FormLabel className="text-gray-700 font-semibold">
                         Level
                       </FormLabel>
@@ -376,15 +398,27 @@ export const Test = ({ initialData, onSubmit }: FormProps) => {
                   <FormMessage />
                 </FormItem>
 
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-semibold">
-                    Resume
-                  </FormLabel>
-                  <FormControl>
-                    <EditorComp name="resume" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormField
+                  control={form.control}
+                  name="resume"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 font-semibold ">
+                        Resume
+                      </FormLabel>
+                      <FormControl>
+                        <textarea
+                          {...field}
+                          className="w-full bg-slate-100"
+                          cols={50}
+                          rows={15}
+                          placeholder="Enter Resume"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}

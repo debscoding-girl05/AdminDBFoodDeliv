@@ -17,7 +17,10 @@ import { NewLesson } from "./components/admin-panel/Lessons/NewLesson";
 import AllLessons from "./components/admin-panel/Lessons/AllLessons";
 import AllBlocks from "./components/admin-panel/Blocks/AllBlocks";
 import { NewBlock } from "./components/admin-panel/Blocks/NewBlock";
-
+import { NewUser } from "./components/admin-panel/Users/NewUser";
+import { handleUserSubmit } from "./lib/formHandler";
+import AllUsers from "./components/admin-panel/Users/AllUsers";
+import MainDashboard from "./components/admin-panel/Dashboard/mainDashboard";
 
 
 function App() {
@@ -31,11 +34,7 @@ function App() {
           <Routes>
             <Route
               path="/dashboard"
-              element={
-                <ContentLayout title="Dashboard">
-                  <div>Your main dashboard content goes here</div>
-                </ContentLayout>
-              }
+              element={<MainDashboard/>}
               errorElement={<ErrorPage />}
             />
             <Route path="/techs/all-tech" element={<AllTechs />} />
@@ -50,6 +49,7 @@ function App() {
               element={<NewTech onSubmit={handleSubmit} />}
               errorElement={<ErrorPage />}
             />
+
             <Route
               path="/tutorials/add-tutorial"
               element={<Test onSubmit={handleTutorialSubmit} />}
@@ -64,7 +64,6 @@ function App() {
               path="/formations/new-formation"
               element={<NewFormation onSubmit={handleFormationSubmit} />}
             />
-
             <Route
               path="/formations/all-formations"
               element={<AllFormations />}
@@ -82,7 +81,6 @@ function App() {
               path="/lessons/edit-lesson/:id"
               element={<NewLesson onSubmit={handleLessonSubmit} />}
             />
-
             <Route path="/lessons/all-lessons" element={<AllLessons />} />
 
             <Route
@@ -93,8 +91,20 @@ function App() {
               path="/blocks/edit-block/:id"
               element={<NewBlock onSubmit={handleBlockSubmit} />}
             />
-
             <Route path="/blocks/all-blocks" element={<AllBlocks />} />
+
+            <Route
+              path="/users/new-user"
+              element={<NewUser onSubmit={handleUserSubmit} />}
+            />
+            <Route
+              path="/users/edit-user/:id"
+              element={<NewUser onSubmit={handleUserSubmit} />}
+            />
+            <Route
+              path="/users/all-users"
+              element={<AllUsers/>}
+            />
           </Routes>
         </AdminPanelLayout>
       </Router>

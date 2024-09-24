@@ -8,6 +8,7 @@ import {
   BookOpenText,
   LibraryBig,
   Blocks,
+  UserCog, 
 } from "lucide-react";
 
 type Submenu = {
@@ -67,13 +68,8 @@ export function getMenuList(pathname: string): Group[] {
               
             }
           ]
-        }
-      ]
-    },
-     {
-      groupLabel: "",
-      menus: [
-        {
+        },
+          {
           href: "/tutorials",
           label: "Tutorials",
           active: pathname.includes("/tutorials"),
@@ -93,14 +89,8 @@ export function getMenuList(pathname: string): Group[] {
               
             }
           ]
-        }
-      ]
-    },
-    
-    {
-      groupLabel: "",
-      menus:[
-        {
+        },
+          {
           href:"/formations",
           label: "Formations",
           active:pathname.includes("/formations"),
@@ -156,6 +146,33 @@ export function getMenuList(pathname: string): Group[] {
               href: "/blocks/new-block",
               label: "New blocks",
               active: pathname === "/blocks/new-block",
+              icon: SquarePen,
+            }
+          ]
+        },
+      ]
+    },
+   
+    
+    {
+      groupLabel: "User Management",
+      menus:[
+         {
+          href:"/users",
+          label:"Users",
+          active:pathname.includes("/users"),
+          icon:UserCog,
+          submenus:[
+            {
+              href:"/users/all-users",
+              label: "All users",
+              active:pathname === "/users/all-users",
+              icon:NotebookTabs,
+            },
+            {
+              href: "/users/new-user",
+              label: "New users",
+              active: pathname === "/users/new-user",
               icon: SquarePen,
             }
           ]

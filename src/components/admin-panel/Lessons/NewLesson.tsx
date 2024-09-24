@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import { useTutoStore } from "@/hooks/tutoStore";
 import { useLessonStore } from "@/hooks/lessonStore";
 import EditorComp from "../EditorComp/EditorComp";
+import slugify from "slugify";
 
 const Slug = z
   .string()
@@ -30,6 +31,9 @@ const Slug = z
   .regex(/^[a-z0-9-]+$/, {
     message: "Slug can only contain lowercase letters, numbers, and hyphens.",
   });
+
+   const durationRegex =
+     /^((\d+ hours?)?\s*(\d+ minutes?)?\s*(\d+ seconds?)?)$/;
 
   export const lessonSchema = z.object({
     title: z
@@ -49,9 +53,10 @@ const Slug = z
       .string()
       .min(5, { message: "meta_description must have at least 5 characters." }),
     meta_keywords: z.array(z.object({ id: z.string(), text: z.string() })),
-    duration: z
-      .string()
-      .min(2, { message: "duration must have at least 2 characters." }),
+    duration: z.string().regex(durationRegex, {
+      message:
+        "Invalid duration format. Please enter time in the format 'X hours Y minutes Z seconds'.",
+    }),
     level: z.string().min(1),
     status: z.boolean().default(false),
     select_formations: z.array(
@@ -172,6 +177,23 @@ const Slug = z
     }
       }
    },[id, form]);
+ useEffect(() => {
+   const title = form.watch("title");
+   const slug = form.watch("slug");
+
+   if (
+     title &&
+     (!id ||
+       slug === "" ||
+       slug === slugify(form.getValues("title"), { lower: true, strict: true }))
+   ) {
+     const generatedSlug = slugify(title, {
+       lower: true,
+       strict: true,
+     });
+     form.setValue("slug", generatedSlug);
+   }
+ }, [form.watch("title")]);
 
    const handleSubmit = (data: z.infer<typeof lessonSchema>) =>{
         const lessonData = {
@@ -241,7 +263,11 @@ const Slug = z
                           Slug
                         </FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter lesson slug" {...field} />
+                          <Input
+                            placeholder="Enter lesson slug"
+                            {...field}
+                            readOnly
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -358,15 +384,27 @@ const Slug = z
                     <FormMessage />
                   </FormItem>
 
-                  <FormItem>
-                    <FormLabel className="text-gray-700 font-semibold">
-                      Resume
-                    </FormLabel>
-                    <FormControl>
-                      <EditorComp name="resume" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                  <FormField
+                    control={form.control}
+                    name="resume"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-gray-700 font-semibold ">
+                          Resume
+                        </FormLabel>
+                        <FormControl>
+                          <textarea
+                            {...field}
+                            className="w-full bg-slate-100"
+                            cols={50}
+                            rows={15}
+                            placeholder="Enter Resume"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </div>
               <div className="border-2 border-gray-300 rounded-lg p-2 m-2 pb-5 divide-y divide-blue-200 ">

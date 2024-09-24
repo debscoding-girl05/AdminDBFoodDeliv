@@ -21,6 +21,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import EditorComp from "../EditorComp/EditorComp";
+import slugify from "slugify";
 
 
 const Slug = z
@@ -176,6 +177,24 @@ export const NewFormation = ({ initialData, onSubmit }: FormationProps) => {
     }
   }, [id, form]);
 
+  useEffect(() => {
+    const name = form.watch("name");
+    const slug = form.watch("slug");
+
+    if (
+      name &&
+      (!id ||
+        slug === "" ||
+        slug === slugify(form.getValues("name"), { lower: true, strict: true }))
+    ) {
+      const generatedSlug = slugify(name, {
+        lower: true,
+        strict: true,
+      });
+      form.setValue("slug", generatedSlug);
+    }
+  }, [form.watch("name")]);
+
   // Handle image change
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -262,7 +281,8 @@ export const NewFormation = ({ initialData, onSubmit }: FormationProps) => {
                         Slug
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter formation slug" {...field} />
+                        <Input placeholder="Enter formation slug" {...field}
+                        readOnly />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -314,8 +334,8 @@ export const NewFormation = ({ initialData, onSubmit }: FormationProps) => {
                   render={(
                     { field } // Added render prop
                   ) => (
-                    <FormItem>
-                      <FormLabel className="text-gray-700 font-semibold">
+                    <FormItem className="z-10">
+                      <FormLabel className="text-gray-700 font-semibold ">
                         Level
                       </FormLabel>
                       <FormControl>
@@ -377,15 +397,27 @@ export const NewFormation = ({ initialData, onSubmit }: FormationProps) => {
                   <FormMessage />
                 </FormItem>
 
-                <FormItem>
-                  <FormLabel className="text-gray-700 font-semibold">
-                    Resume
-                  </FormLabel>
-                  <FormControl>
-                    <EditorComp name="resume" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                <FormField
+                  control={form.control}
+                  name="resume"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-gray-700 font-semibold " >
+                        Resume
+                      </FormLabel>
+                      <FormControl>
+                        <textarea
+                          {...field}
+                          className="w-full bg-slate-100"
+                          cols={50}
+                          rows={15}
+                          placeholder="Enter Resume"
+                       />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </div>
             <div className="border-2 border-gray-300 rounded-lg p-2 m-2 pb-5 divide-y divide-blue-200 ">

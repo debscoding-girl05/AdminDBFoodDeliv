@@ -12,7 +12,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import {
+  MoreHorizontal,
+  ListPlus,
+  Trash2,
+  UserRoundPen,
+  Copy,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -119,6 +125,7 @@ const AllFormations: React.FC = () => {
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(formation.id)}
               >
+                <Copy className="mr-2 size-5 text-neutral-500" />
                 Copy Tutorial ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -127,6 +134,7 @@ const AllFormations: React.FC = () => {
                   navigate(`/formations/edit-formation/${formation.id}`)
                 }
               >
+                <UserRoundPen className="mr-2 size-5 text-neutral-500" />
                 Edit Formation
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -138,6 +146,7 @@ const AllFormations: React.FC = () => {
                   }
                 }}
               >
+                <Trash2 className="mr-2 size-5 text-red-500" />
                 Delete Formation
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -186,8 +195,10 @@ const AllFormations: React.FC = () => {
       <div className="flex justify-start items-center mt-3">
         <button
           onClick={() => navigate("/formations/new-formation")}
-          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105"
+          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-2 rounded ml-4 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 flex items-center"
         >
+          {" "}
+          <ListPlus style={{ marginRight: "13px" }} />
           Add Formation
         </button>
       </div>

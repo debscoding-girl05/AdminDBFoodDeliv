@@ -132,7 +132,7 @@ const AllUsers: React.FC = () => {
               <DropdownMenuItem
                 onClick={() => navigate(`/users/edit-user/${user.id}`)}
               >
-                <UserRoundPen className="mr-2 size-5 text-neutral-800" />
+                <UserRoundPen className="mr-2 size-5 text-neutral-500" />
                 Edit User
               </DropdownMenuItem>
               <DropdownMenuItem

@@ -13,9 +13,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import {
-  LucideScissorsLineDashed,
+  PackagePlus,
   MoreHorizontal,
-  SquarePlus,
+  
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -201,7 +201,7 @@ const AllBlocks: React.FC = () => {
           className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 flex items-center"
         >
           {" "}
-          <SquarePlus style={{ marginRight: "18px" }} />
+          <PackagePlus style={{ marginRight: "12px" }} />
           Add New Block
         </button>
       </div>

@@ -12,7 +12,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import {
+  MoreHorizontal,
+  FilePlus2,
+  Trash2,
+  UserRoundPen,
+  Copy,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -125,6 +131,7 @@ const AllTutos: React.FC = () => {
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(tutorial.id)}
               >
+                <Copy className="mr-2 size-5 text-neutral-500" />
                 Copy Tutorial ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -133,6 +140,7 @@ const AllTutos: React.FC = () => {
                   navigate(`/tutorials/edit-tutorial/${tutorial.id}`)
                 }
               >
+                <UserRoundPen className="mr-2 size-5 text-neutral-500" />
                 Edit Tutorial
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -144,6 +152,7 @@ const AllTutos: React.FC = () => {
                   }
                 }}
               >
+                <Trash2 className="mr-2 size-5 text-red-500" />
                 Delete Tutorial
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -192,8 +201,10 @@ const AllTutos: React.FC = () => {
       <div className="flex justify-start items-center mt-3">
         <button
           onClick={() => navigate("/tutorials/add-tutorial")}
-          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105"
+          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-2 rounded ml-4 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 flex items-center"
         >
+          {" "}
+          <FilePlus2 style={{ marginRight: "13px" }} />
           Add Tutorial
         </button>
       </div>

@@ -12,7 +12,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import {
+  MoreHorizontal,
+  BookPlus,
+  Trash2,
+  UserRoundPen,
+  Copy,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -32,6 +38,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useLessonStore } from "@/hooks/lessonStore";
+
 
 const AllLessons: React.FC = () => {
   const columns: ColumnDef<any>[] = [
@@ -127,14 +134,14 @@ const AllLessons: React.FC = () => {
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(lesson.id)}
               >
+                <Copy className="mr-2 size-5 text-neutral-500" />
                 Copy Tutorial ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() =>
-                  navigate(`/lessons/edit-lesson/${lesson.id}`)
-                }
+                onClick={() => navigate(`/lessons/edit-lesson/${lesson.id}`)}
               >
+                <UserRoundPen className="mr-2 size-5 text-neutral-500" />
                 Edit Lesson
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -146,6 +153,7 @@ const AllLessons: React.FC = () => {
                   }
                 }}
               >
+                <Trash2 className="mr-2 size-5 text-red-500" />
                 Delete Lesson
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -194,8 +202,10 @@ const AllLessons: React.FC = () => {
       <div className="flex justify-start items-center mt-3">
         <button
           onClick={() => navigate("/lessons/new-lesson")}
-          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105"
+          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-2 rounded ml-4 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 flex items-center"
         >
+          {" "}
+          <BookPlus style={{ marginRight: "13px" }} />
           Add New Lesson
         </button>
       </div>

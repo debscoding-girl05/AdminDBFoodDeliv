@@ -12,7 +12,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { LucideScissorsLineDashed, MoreHorizontal } from "lucide-react";
+import {
+  LucideScissorsLineDashed,
+  MoreHorizontal,
+  SquarePlus,
+} from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -193,9 +198,11 @@ const AllBlocks: React.FC = () => {
       <div className="flex justify-start items-center mt-3">
         <button
           onClick={() => navigate("/blocks/new-block")}
-          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105"
+          className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 flex items-center"
         >
-          Add New Lesson
+          {" "}
+          <SquarePlus style={{ marginRight: "18px" }} />
+          Add New Block
         </button>
       </div>
       <div>

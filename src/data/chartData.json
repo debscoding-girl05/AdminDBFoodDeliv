@@ -1,0 +1,67 @@
+{
+   "coursLesPlusLikes": [
+  { "lesson": "React Basics", "likes": 1200, "month": "january", "fill": "var(--color-january)" },
+  { "lesson": "Advanced TypeScript", "likes": 980, "month": "february", "fill": "var(--color-february)" },
+  { "lesson": "Node.js Mastery", "likes": 1500, "month": "march", "fill": "var(--color-march)" },
+  { "lesson": "GraphQL in Practice", "likes": 1100, "month": "april", "fill": "var(--color-april)" },
+  { "lesson": "Frontend Testing", "likes": 1250, "month": "may", "fill": "var(--color-may)" },
+  { "lesson": "CI/CD Pipeline", "likes": 900, "month": "june", "fill": "var(--color-june)" }
+],
+
+ "coursLesPluSuivis": [
+  { "lesson": "React Basics", "duration": 10, "month": "january", "fill": "var(--color-january)" },
+  { "lesson": "Advanced TypeScript", "duration": 30, "month": "february", "fill": "var(--color-february)" },
+  { "lesson": "Node.js Mastery", "duration": 60, "month": "march", "fill": "var(--color-march)" },
+  { "lesson": "GraphQL in Practice", "duration": 40, "month": "april", "fill": "var(--color-april)" },
+  { "lesson": "Frontend Testing", "duration": 50, "month": "may", "fill": "var(--color-may)" },
+  { "lesson": "CI/CD Pipeline", "duration": 15, "month": "june", "fill": "var(--color-june)" }
+],
+
+  "inscriptionConsultationsData":[
+  { "month": "January", "consultations": 1200, "signups": 300 },
+  { "month": "February", "consultations": 1500, "signups": 400 },
+  { "month": "March", "consultations": 1100, "signups": 250 },
+  { "month": "April", "consultations": 1800, "signups": 500 },
+  { "month": "May", "consultations": 1600, "signups": 450 },
+  { "month": "June", "consultations": 2000, "signups": 550 },
+  { "month": "July", "consultations": 2200, "signups": 600 },
+  { "month": "August", "consultations": 2100, "signups": 580 },
+  { "month": "September", "consultations": 2300, "signups": 620 },
+  { "month": "October", "consultations": 2500, "signups": 700 },
+  { "month": "November", "consultations": 2400, "signups": 650 },
+  { "month": "December", "consultations": 2600, "signups": 720 }
+  ],
+  "usersData":[
+  { "month": "January", "users": 100 },
+  { "month": "February", "users": 150 },
+  { "month": "March", "users": 120 },
+  { "month": "April", "users": 250 },
+  { "month": "May", "users": 500 },
+  { "month": "June", "users": 350 },
+  { "month": "July", "users": 650 },
+  { "month": "August", "users": 450 },
+  { "month": "September", "users": 300 },
+  { "month": "October", "users": 550 }, 
+  { "month": "November", "users": 600 },
+  {"month": "December", "users": 700 }
+  ],
+
+  "likedDislikedTutorialsData":[
+  { "tutorial": "React Basics", "likes": 120, "dislikes": 10 },
+  { "tutorial": "Advanced Node.js", "likes": 90, "dislikes": 30 },
+  { "tutorial": "CSS Flexbox", "likes": 150, "dislikes": 20 },
+  { "tutorial": "Vue.js for Beginners", "likes": 110, "dislikes": 15 },
+  { "tutorial": "MongoDB Essentials", "likes": 85, "dislikes": 25 },
+  { "tutorial": "GraphQL Basics", "likes": 95, "dislikes": 20 }
+  ],
+
+  "mostCommentedTutorialsData":[
+  { "tutorial": "React Basics", "comments": 85 },
+  { "tutorial": "Advanced Node.js",  "comments": 70 },
+  { "tutorial": "CSS Flexbox",  "comments": 95 },
+  { "tutorial": "Vue.js for Beginners",  "comments": 65 },
+  { "tutorial": "MongoDB Essentials", "comments": 55},
+  { "tutorial": "GraphQL Basics",  "comments": 40 }
+  ]
+
+}

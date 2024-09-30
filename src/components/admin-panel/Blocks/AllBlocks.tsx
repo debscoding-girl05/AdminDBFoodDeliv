@@ -15,7 +15,9 @@ import {
 import {
   PackagePlus,
   MoreHorizontal,
-  
+  Trash2,
+  UserRoundPen,
+  Copy,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -133,12 +135,14 @@ const AllBlocks: React.FC = () => {
               <DropdownMenuItem
                 onClick={() => navigator.clipboard.writeText(block.id)}
               >
+                <Copy className="mr-2 size-5 text-neutral-500" />
                 Copy Tutorial ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onClick={() => navigate(`/blocks/edit-block/${block.id}`)}
               >
+                <UserRoundPen className="mr-2 size-5 text-neutral-500" />
                 Edit Lesson
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -150,6 +154,7 @@ const AllBlocks: React.FC = () => {
                   }
                 }}
               >
+                <Trash2 className="mr-2 size-5 text-red-500" />
                 Delete Lesson
               </DropdownMenuItem>
             </DropdownMenuContent>

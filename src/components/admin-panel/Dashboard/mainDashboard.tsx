@@ -1,7 +1,7 @@
-import { Navbar } from '../navbar';
-import {PiechartCoursSuivis} from './Charts/PiechartCoursSuivis';
-import HeaderDashboard from './HeaderDashboard';
-import LinechartUtil from './Charts/LinechartUtil';
+import { Navbar } from "../navbar";
+import { PiechartCoursSuivis } from "./Charts/PiechartCoursSuivis";
+import HeaderDashboard from "./HeaderDashboard";
+import LinechartUtil from "./Charts/LinechartUtil";
 import {
   Select,
   SelectTrigger,
@@ -9,26 +9,24 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import chartData from "@/data/chartData.json"
-import AreachartInscrip from './Charts/AreachartInscrip';
-import { useState } from 'react';
-import { PiechartCoursLikes } from './Charts/PiechartCoursLikes';
-import BarchartTutoLike from './Charts/BarchartTutoLike';
-import HoriBarchartTutoCom from './Charts/HoriBarchartTutoCom';
+import chartData from "@/data/chartData.json";
+import AreachartInscrip from "./Charts/AreachartInscrip";
+import { useState } from "react";
+import { PiechartCoursLikes } from "./Charts/PiechartCoursLikes";
+import BarchartTutoLike from "./Charts/BarchartTutoLike";
+import HoriBarchartTutoCom from "./Charts/HoriBarchartTutoCom";
 
-
-const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const years = ["2024", "2025", "2026", "2027"];
 
 export default function MainDashboard() {
-    const [selectedMonth, setSelectedMonth] = useState(months[0]);
+  const [selectedYear, setSelectedYear] = useState(years[0]);
   return (
     <div>
       <div>
         <Navbar title="Dashboard" />
       </div>
       <div>
-        {/* Global Month Filter */}
-
+        {/* Global Year Filter */}
         <div className="m-2 mb-8 ">
           <div className="flex items-center my-4 ml-3">
             <span className="text-lg font-extralight">
@@ -38,16 +36,16 @@ export default function MainDashboard() {
           </div>
           <HeaderDashboard />
         </div>
-        <div className="flex justify-end mb-4">
-          <h2 className="mr-5 mt-2 font-semibold">Filtre :</h2>
-          <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+        <div className="flex justify-end mb-4 mr-4">
+          <h2 className="mr-5 mt-2 font-semibold">Année :</h2>
+          <Select value={selectedYear} onValueChange={setSelectedYear}>
             <SelectTrigger className="w-[150px]">
               <SelectValue placeholder="Select Month" />
             </SelectTrigger>
             <SelectContent>
-              {months.map((month) => (
-                <SelectItem key={month} value={month}>
-                  {month}
+              {years.map((year) => (
+                <SelectItem key={year} value={year}>
+                  {year}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -69,7 +67,7 @@ export default function MainDashboard() {
             <div className="border-t border-gray-300 flex-grow ml-2"></div>
           </div>
           <div className="grid grid-cols-2 gap-1 ">
-            <PiechartCoursSuivis/>
+            <PiechartCoursSuivis />
             <PiechartCoursLikes />
           </div>
         </div>
@@ -81,7 +79,7 @@ export default function MainDashboard() {
             <div className="border-t border-gray-300 flex-grow ml-2"></div>
           </div>
           <div className="grid grid-cols-2 gap-1 h-auto">
-            <BarchartTutoLike/>
+            <BarchartTutoLike />
             <HoriBarchartTutoCom />
           </div>
         </div>

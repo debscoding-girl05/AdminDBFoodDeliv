@@ -71,7 +71,7 @@ const AllUsers: React.FC = () => {
         return imageUrl ? (
           <img
             src={imageUrl}
-            alt="User Image"
+            alt="UserImage"
             className="w-16 h-16 object-cover"
           />
         ) : (

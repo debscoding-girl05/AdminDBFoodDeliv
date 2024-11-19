@@ -1,26 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AdminPanelLayout from "./components/admin-panel/admin-panel-layout";
-import { ContentLayout } from "./components/admin-panel/content-layout";
 import { ThemeProvider } from "./providers/theme-provider";
-import AllTechs from "./components/admin-panel/Technologies/AllTechs";
-import { NewTech } from "./components/admin-panel/Technologies/NewTech";
 import { Toaster } from "./components/ui/toaster";
 import ErrorPage from "./components/admin-panel/error-page";
-import { Test } from "./components/admin-panel/Tutorials/NewTuto";
-import AllTutos from "./components/admin-panel/Tutorials/AllTutos";
-import { handleBlockSubmit, handleLessonSubmit, handleSubmit } from "./lib/formHandler";
-import { handleTutorialSubmit } from "./lib/formHandler";
-import { NewFormation } from "./components/admin-panel/Formations/NewFormation";
-import { handleFormationSubmit } from "./lib/formHandler";
-import AllFormations from "./components/admin-panel/Formations/AllFormations";
-import { NewLesson } from "./components/admin-panel/Lessons/NewLesson";
-import AllLessons from "./components/admin-panel/Lessons/AllLessons";
-import AllBlocks from "./components/admin-panel/Blocks/AllBlocks";
-import { NewBlock } from "./components/admin-panel/Blocks/NewBlock";
+import { handleCategSubmit, handleDishSubmit } from "./lib/formHandler";
 import { NewUser } from "./components/admin-panel/Users/NewUser";
 import { handleUserSubmit } from "./lib/formHandler";
 import AllUsers from "./components/admin-panel/Users/AllUsers";
 import MainDashboard from "./components/admin-panel/Dashboard/mainDashboard";
+import { NewCat } from "./components/admin-panel/Categories/NewCat";
+import AllCats from "./components/admin-panel/Categories/AllCats";
+import AllDishes from "./components/admin-panel/Dishes/AllDishes";
+import { NewDish } from "./components/admin-panel/Dishes/NewDishes";
+import CommandTable from "./components/admin-panel/Commands/AllCommands";
+import CommandDetail from "./components/admin-panel/Commands/CommandDetail";
 
 
 function App() {
@@ -34,64 +27,41 @@ function App() {
           <Routes>
             <Route
               path="/dashboard"
-              element={<MainDashboard/>}
+              element={<MainDashboard />}
               errorElement={<ErrorPage />}
             />
-            <Route path="/techs/all-tech" element={<AllTechs />} />
-            {/* Ensure AllTechs is used */}
+            <Route path="/plats/all-plat" element={<AllDishes />} />
+         
             <Route
-              path="/techs/new-tech"
-              element={<NewTech onSubmit={handleSubmit} />}
+              path="/plats/new-plat"
+              element={<NewDish onSubmit={handleDishSubmit} />}
               errorElement={<ErrorPage />}
             />
             <Route
-              path="/techs/edit-tech/:id"
-              element={<NewTech onSubmit={handleSubmit} />}
+              path="/plats/edit-plat/:id"
+              element={<NewDish onSubmit={handleDishSubmit} />}
               errorElement={<ErrorPage />}
             />
 
+           
             <Route
-              path="/tutorials/add-tutorial"
-              element={<Test onSubmit={handleTutorialSubmit} />}
-            />
-            <Route path="/tutorials/all-tutorials" element={<AllTutos />} />
-            <Route
-              path="/tutorials/edit-tutorial/:id"
-              element={<Test onSubmit={handleTutorialSubmit} />}
-            />
-
-            <Route
-              path="/formations/new-formation"
-              element={<NewFormation onSubmit={handleFormationSubmit} />}
+              path="/commandes/all-commandes"
+              element={<CommandTable />}
             />
             <Route
-              path="/formations/all-formations"
-              element={<AllFormations />}
-            />
-            <Route
-              path="/formations/edit-formation/:id"
-              element={<NewFormation onSubmit={handleFormationSubmit} />}
+              path="/all-commandes/command-details/:id"
+              element={<CommandDetail/>}
             />
 
             <Route
-              path="/lessons/new-lesson"
-              element={<NewLesson onSubmit={handleLessonSubmit} />}
+              path="/categories/new-categories"
+              element={<NewCat onSubmit={handleCategSubmit} />}
             />
             <Route
-              path="/lessons/edit-lesson/:id"
-              element={<NewLesson onSubmit={handleLessonSubmit} />}
+              path="/categories/edit-categories/:id"
+              element={<NewCat onSubmit={handleCategSubmit} />}
             />
-            <Route path="/lessons/all-lessons" element={<AllLessons />} />
-
-            <Route
-              path="/blocks/new-block"
-              element={<NewBlock onSubmit={handleBlockSubmit} />}
-            />
-            <Route
-              path="/blocks/edit-block/:id"
-              element={<NewBlock onSubmit={handleBlockSubmit} />}
-            />
-            <Route path="/blocks/all-blocks" element={<AllBlocks />} />
+            <Route path="/categories/all-categories" element={<AllCats />} />
 
             <Route
               path="/users/new-user"
@@ -101,10 +71,7 @@ function App() {
               path="/users/edit-user/:id"
               element={<NewUser onSubmit={handleUserSubmit} />}
             />
-            <Route
-              path="/users/all-users"
-              element={<AllUsers/>}
-            />
+            <Route path="/users/all-users" element={<AllUsers />} />
           </Routes>
         </AdminPanelLayout>
       </Router>

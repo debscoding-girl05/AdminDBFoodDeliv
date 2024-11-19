@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { ChevronDown, Dot, LucideIcon } from "lucide-react";
+import { ChevronDown, ListTree, LucideIcon, Soup } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -106,7 +106,7 @@ export function CollapseMenuButton({
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-        {submenus.map(({ href,label, active }, index) => (
+        {submenus.map(({ href, label, active }, index) => (
           <Button
             key={index}
             variant={active ? "secondary" : "ghost"}
@@ -115,9 +115,8 @@ export function CollapseMenuButton({
           >
             <Link to={href}>
               {" "}
-              {/* Updated here */}
               <span className="mr-4 ml-2">
-                <Dot size={18} />
+                <ListTree size={15} />
               </span>
               <p
                 className={cn(
@@ -172,12 +171,9 @@ export function CollapseMenuButton({
           {label}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {submenus.map(({ href,label }, index) => (
+        {submenus.map(({ href, label }, index) => (
           <DropdownMenuItem key={index} asChild>
-            <Link
-              className="cursor-pointer"
-              to={href}
-            >
+            <Link className="cursor-pointer" to={href}>
               console.log('Current pathname:', pathname); {/* Updated here */}
               <p className="max-w-[180px] truncate">{label}</p>
             </Link>

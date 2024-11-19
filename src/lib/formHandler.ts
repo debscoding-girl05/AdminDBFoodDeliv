@@ -1,79 +1,37 @@
-import { useTechStore } from "../hooks/techStore";
-import { useTutoStore } from "../hooks/tutoStore";
 import { z } from "zod";
-import { formSchema } from "../components/admin-panel/Tutorials/NewTuto";
-import { formationSchema } from "@/components/admin-panel/Formations/NewFormation";
-import { useFormationStore } from "@/hooks/formationStore";
-import { useLessonStore } from "@/hooks/lessonStore";
-import { lessonSchema } from "@/components/admin-panel/Lessons/NewLesson";
-import { blockSchema } from "@/components/admin-panel/Blocks/NewBlock";
-import { useBlockStore } from "@/hooks/blockStore";
 import { userSchema } from "@/components/admin-panel/Users/NewUser";
 import { useUserStore } from "@/hooks/userStore";
+import { useCategStore } from "@/hooks/categorieStore";
+import { catSchema } from "@/components/admin-panel/Categories/NewCat";
+import { dishSchema } from "@/components/admin-panel/Dishes/NewDishes";
+import { useDishStore } from "@/hooks/dishStore";
 
-export const handleSubmit = (
-  name: string,
-  slug: string,
-  image: string | null,
-  active: boolean,
-  created_At: string
-) => {
-  const addTech = useTechStore((state) => state.addTech);
-  addTech(name, image || "", slug, active, created_At);
-};
 
-export const handleTutorialSubmit = (data: z.infer<typeof formSchema>) => {
-  const addTutorial = useTutoStore((state) => state.addTutorial);
-  const technology_id = Number(data.technologies[0]?.id) || 0;
-  const adjustedData = {
-    ...data,
-    technology_id,
-    meta_keywords: data.meta_keywords.map(({ id, text }) => ({
-      id: Number(id),
-      name: text,
-    })),
-    image: data.image || "", // Provide default empty string
-    defaultTechnology: data.defaultTechnology || "", // Ensure defaultTechnology is a string
-  };
-  addTutorial(adjustedData);
-};
-
-export const handleFormationSubmit= (data: z.infer<typeof formationSchema>) => {
-  const addFormation = useFormationStore((state) => state.addFormation);
-  const technology_id = Number(data.technologies[0]?.id) || 0;
-  const adjustedData = {
-    ...data,
-    technology_id,
-    meta_keywords: data.meta_keywords.map(({ id, text }) => ({
-      id: Number(id),
-      name: text,
-    })),
-    image: data.image || "", // Provide default empty string
-    defaultTechnology: data.defaultTechnology || "", // Ensure defaultTechnology is a string
-  };
-  addFormation(adjustedData);
-};
-
-export const handleLessonSubmit=(data: z.infer<typeof lessonSchema>)=>{
-  const addLesson=useLessonStore((state)=> state.addLesson);
-  const formData ={
-    ...data,
-     meta_keywords: data.meta_keywords.map(({ id, text }) => ({
-      id: Number(id),
-      name: text,
-    })),
-  };
-  addLesson(formData);
-};
-
-export const handleBlockSubmit = (data: z.infer<typeof blockSchema>)=>{
-    const addBlock= useBlockStore((state)=>state.addBlock);
-    const blockData= {
+export const handleCategSubmit = (data: z.infer<typeof catSchema>)=>{
+    const addCateg= useCategStore((state)=>state.addCateg);
+    const catData= {
         ...data,
       
 };
-    addBlock(blockData);
+    addCateg(catData);
 }
+
+
+export const handleDishSubmit = (data: z.infer<typeof dishSchema>) => {
+  const addDish = useDishStore((state) => state.addDish); // Use addDish here
+
+  const dishData = {
+    ...data,
+    image: data.image || "", // Default image to an empty string if not provided
+    created_at: new Date().toISOString().split("T")[0],
+    select_categs: data.select_categs.map(({ title, id }) => ({
+      id,
+      name: title,
+    })),
+  };
+
+  addDish(dishData);
+};
 
 export const handleUserSubmit=(data: z.infer<typeof userSchema>)=>{
   const addUser = useUserStore((state)=>state.addUser);

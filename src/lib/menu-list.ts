@@ -1,14 +1,11 @@
 import {
-  Cpu,
   LayoutGrid,
   LucideIcon,
   SquarePen,
   NotebookTabs,
-  MonitorStop,
   BookOpenText,
-  LibraryBig,
-  Blocks,
-  UserCog, 
+  UserCog,
+  Soup 
 } from "lucide-react";
 
 type Submenu = {
@@ -49,103 +46,57 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Contents",
       menus: [
         {
-          href: "/techs",
-          label: "Technologies",
-          active: pathname.includes("/techs"),
-          icon: Cpu,
+          href: "/plats",
+          label: "Plats",
+          active: pathname.includes("/plats"),
+          icon: Soup,
           submenus: [
             {
-              href: "/techs/all-tech",
-              label: "All Techs",
-              active: pathname === "/techs/all-tech",
+              href: "/plats/all-plat",
+              label: "Tableau Plats",
+              active: pathname === "/plats/all-plat",
               icon: NotebookTabs,
             },
             {
-              href: "/techs/new-tech",
-              label: "New Technology",
+              href: "/plats/new-plat",
+              label: "Ajouter Plat",
               active: pathname === "/techs/new-tech",
               icon: SquarePen,
               
             }
           ]
         },
+         
           {
-          href: "/tutorials",
-          label: "Tutorials",
-          active: pathname.includes("/tutorials"),
-          icon: MonitorStop ,
-          submenus: [
-            {
-              href: "/tutorials/all-tutorials",
-              label: "All Tutorials",
-              active: pathname === "/tutorials/all-tutorials",
-              icon: NotebookTabs,
-            },
-            {
-              href: "/tutorials/add-tutorial",
-              label: "New Tutorial",
-              active: pathname === "/tutorials/new-tutorial",
-              icon: SquarePen,
-              
-            }
-          ]
-        },
-          {
-          href:"/formations",
-          label: "Formations",
-          active:pathname.includes("/formations"),
+          href:"/commandes",
+          label: "Commandes",
+          active:pathname.includes("/commandes"),
           icon:BookOpenText ,
           submenus:[
             {
-              href: "/formations/all-formations",
-              label: "All formations",
-              active: pathname === "/formations/all-formations",
+              href: "/commandes/all-commandes",
+              label: "Toutes les Commandes",
+              active: pathname === "/commandes/all-commandes",
               icon: NotebookTabs,
             },
-            {
-              href: "/formations/new-formation",
-              label: "New formations",
-              active: pathname === "/formations/new-formation",
-              icon: SquarePen,
-            }
           ]
         },
         {
-          href:"/lessons",
-          label:"Lessons",
-          active:pathname.includes("/lessons"),
-          icon:LibraryBig,
+          href:"/categories",
+          label:"Categories",
+          active:pathname.includes("/categories"),
+          icon:NotebookTabs,
           submenus:[
             {
-              href:"/lessons/all-lessons",
-              label: "All Lessons",
-              active:pathname === "/lessons/all-lessons",
+              href:"/categories/all-categories",
+              label: "Toutes les categories",
+              active:pathname === "/blocks/all-categories",
               icon:NotebookTabs,
             },
             {
-              href: "/lessons/new-lesson",
-              label: "New lessons",
-              active: pathname === "/lessons/new-lesson",
-              icon: SquarePen,
-            }
-          ]
-        },
-        {
-          href:"/blocks",
-          label:"Blocks",
-          active:pathname.includes("/blocks"),
-          icon:Blocks,
-          submenus:[
-            {
-              href:"/blocks/all-blocks",
-              label: "All blocks",
-              active:pathname === "/blocks/all-blocks",
-              icon:NotebookTabs,
-            },
-            {
-              href: "/blocks/new-block",
-              label: "New blocks",
-              active: pathname === "/blocks/new-block",
+              href: "/categories/new-categories",
+              label: "Nouvelle Categorie",
+              active: pathname === "/categories/new-categories",
               icon: SquarePen,
             }
           ]
@@ -155,11 +106,11 @@ export function getMenuList(pathname: string): Group[] {
    
     
     {
-      groupLabel: "User Management",
+      groupLabel: "Gestion des Utilisateurs",
       menus:[
          {
           href:"/users",
-          label:"Users",
+          label:"Utilisateurs",
           active:pathname.includes("/users"),
           icon:UserCog,
           submenus:[

@@ -81,7 +81,7 @@ const AllUsers: React.FC = () => {
     },
     {
       accessorKey: "name",
-      header: "Title",
+      header: "Name",
       cell: ({ row }) => <span>{row.getValue("name")}</span>,
     },
     {
@@ -91,7 +91,7 @@ const AllUsers: React.FC = () => {
     },
     {
       accessorKey: "email",
-      header: "E-mail",
+      header: "Email",
       cell: ({ row }) => <span>{row.getValue("email")}</span>,
     },
     {
@@ -105,7 +105,24 @@ const AllUsers: React.FC = () => {
         </div>
       ),
     },
-
+    {
+      accessorKey: "role",
+      header: "Role",
+      cell: ({ row }) => {
+        const role = row.getValue("role") as string;
+        return (
+          <select
+            value={role}
+            onChange={(e) => updateUserRole(row.getValue("id"), e.target.value)}
+            className="p-1 bg-gray-100 rounded-md"
+          >
+            <option value="USER">USER</option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="DELIVERER">DELIVERER</option>
+          </select>
+        );
+      },
+    },
     {
       id: "actions",
       enableHiding: false,
@@ -154,6 +171,7 @@ const AllUsers: React.FC = () => {
 
   const deleteUser = useUserStore((state) => state.deleteUser);
   const users = useUserStore((state) => state.users);
+  const updateUserRole = useUserStore((state) => state.updateRole);
   const navigate = useNavigate();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -193,7 +211,6 @@ const AllUsers: React.FC = () => {
           onClick={() => navigate("/users/new-user")}
           className="bg-gradient-to-r from-teal-400 to-blue-500 hover:from-orange-500 hover:to-red-500 text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 flex items-center"
         >
-          {" "}
           <UserPlus style={{ marginRight: "18px" }} />
           Add user
         </button>

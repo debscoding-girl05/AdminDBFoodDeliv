@@ -39,6 +39,12 @@ export const handleUserSubmit=(data: z.infer<typeof userSchema>)=>{
     ...data,
      image: data.image || "",
      tel: data.tel || "",
+      name: data.name || "",
+    surname: data.surname || "",
+    email: data.email || "",
+    password: data.password || "",
+    status: data.status,
+    role: data.role || "",
   };
   addUser(userData);
   

@@ -25,9 +25,7 @@ export const userSchema = z.object({
   surname: z
     .string()
     .min(3, { message: "Surname must have at least 3 characters." }),
-  email: z
-  .string()
-  .email({ message: "Please enter a valid email address." }),
+  email: z.string().email({ message: "Please enter a valid email address." }),
   image: z.string().optional(),
   password: z
     .string()
@@ -46,22 +44,23 @@ export const userSchema = z.object({
     .max(9, { message: "Telephone number cannot exceed 9 digits." })
     .optional(),
   status: z.boolean(),
+  role: z.enum(["USER", "ADMIN", "DELIVERER"]),
 });
 
 interface UserProps {
   initialData?: {
     id?: string;
     name: string;
-    surname:string;
+    surname: string;
     email: string;
     password: string;
     tel: string;
     status: boolean;
     image: string;
+    role: "USER" | "ADMIN" |"DELIVERER";
   };
   onSubmit: (data: z.infer<typeof userSchema>) => void;
 }
-
 
 export const NewUser = ({ initialData, onSubmit }: UserProps) => {
   const [isActive, setIsActive] = useState(initialData?.status || false);
@@ -73,8 +72,8 @@ export const NewUser = ({ initialData, onSubmit }: UserProps) => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const addUser= useUserStore((state)=> state.addUser);
-  const editUser = useUserStore((state)=> state.editUser);
+  const addUser = useUserStore((state) => state.addUser);
+  const editUser = useUserStore((state) => state.editUser);
 
   const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
@@ -86,61 +85,60 @@ export const NewUser = ({ initialData, onSubmit }: UserProps) => {
       email: initialData?.email || "",
       password: initialData?.password || "",
       tel: initialData?.tel || "",
+      role: initialData?.role || "USER",
     },
   });
 
-  useEffect(()=>{
-    
-    if(id){
-    const userToEdit = useUserStore
+  useEffect(() => {
+    if (id) {
+      const userToEdit = useUserStore
         .getState()
-        .users.find((user: { id: number }) => user.id === Number(id));
+        .users.find((user: { id: string }) => user.id === id);
 
-     if(userToEdit){
+      if (userToEdit) {
         form.reset({
-            ...userToEdit,
+          ...userToEdit,
+          role: userToEdit.role as "USER" | "ADMIN" | "DELIVERER",
         });
         setSelectedImage(userToEdit.image || null);
         setIsActive(userToEdit.status);
-     }   
+      }
     }
-   
-  })
+  }, [id, form]);
 
-   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-     const file = e.target.files?.[0];
-     if (file) {
-       const reader = new FileReader();
-       reader.onloadend = () => {
-         const base64Image = reader.result as string;
-         setSelectedImage(base64Image);
-         localStorage.setItem("userImage", base64Image);
-       };
-       reader.readAsDataURL(file);
-     }
-   };
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64Image = reader.result as string;
+        setSelectedImage(base64Image);
+        localStorage.setItem("userImage", base64Image);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
-
-   const handleUserFormSubmit=(data: z.infer<typeof userSchema>) =>{
+  const handleUserFormSubmit = (data: z.infer<typeof userSchema>) => {
     const userData = {
-        ...data,
-        id: id ? parseInt(id) : Date.now(),
-        image: selectedImage || "",
-        tel: data.tel || "", // Ensure tel is always a string
+      ...data,
+      id: id ? String(id) : Date.now().toString(),
+      image: selectedImage || "",
+      tel: data.tel || "", // Ensure tel is always a string
+      role: "USER", // Add a default role value
     };
 
-    if(id){
-        editUser(parseInt(id),userData);
+    if (id) {
+      editUser(id, userData);
+    } else {
+      addUser(userData);
     }
-    else{
-        addUser(userData)
-    }
-     toast({
-       description: `User ${id ? "updated" : "added"} successfully!`,
-     });
-     navigate("/users/all-users");
-   };
 
+    toast({
+      description: `User ${id ? "updated" : "added"} successfully!`,
+    });
+    navigate("/users/all-users");
+  };
 
   return (
     <div>
@@ -296,12 +294,14 @@ export const NewUser = ({ initialData, onSubmit }: UserProps) => {
                 </FormItem>
               )}
             />
-            <button
-              type="submit"
-              className="bg-gradient-to-r from-teal-400 to-indigo-500 hover:from-cyan-500 hover:to-red-500 ...text-white font-bold py-2 px-4 rounded ml-5 mt-3 mb-3 transition ease-in-out delay-120 hover:scale-105 ring-2 hover:ring-4"
-            >
-              {id ? "Update User" : "Add User"}
-            </button>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              >
+                {id ? "Update" : "Add"} User
+              </button>
+            </div>
           </form>
         </Form>
       </div>

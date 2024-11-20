@@ -35,6 +35,7 @@ const CommandDetail: React.FC = () => {
 
   useEffect(() => {
     fetchOrders();
+    
   }, [fetchOrders]);
 
   useEffect(() => {
